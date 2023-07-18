@@ -1,0 +1,15 @@
+## Es el archivo de manejo de direcciones
+# en caso de error 404:
+##ErrorDocument 404 https://politecnicadelosandes.edu.co/appstech_solutions/404.html
+## Permite manejar archivo por url sin extension 
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html
+
+
