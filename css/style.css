@@ -1,0 +1,140 @@
+.justify{
+    text-align: justify;
+}
+/* ==== featured-services */
+#featured-services {
+    background: #000;
+}
+
+#featured-services .box {
+    padding: 30px 20px;
+}
+
+#featured-services .box-bg {
+    background-image: linear-gradient(0deg, #000000 0%, #242323 50%, #000000 100%);
+}
+
+#featured-services ion-icon {
+    color: #18d26e;
+    font-size: 48px;
+    display: inline-block;
+    line-height: 1;
+}
+
+#featured-services h4 {
+    font-weight: 400;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+#featured-services h4 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#featured-services h4 a:hover {
+    color: #18d26e;
+}
+
+#featured-services p {
+    font-size: 14px;
+    line-height: 24px;
+    color: #fff;
+    margin-bottom: 0;
+}
+/* ==== fin featured-services */
+
+/* Nuestro Trabajo
+--------------------------------*/
+
+.section-header h3 {
+    font-size: 32px;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-header h3::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 250px;
+    height: 1px;
+    background: #ddd;
+    bottom: 1px;
+    left: calc(50% - 125px);
+}
+
+.section-header h3::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 5px;
+    background: #18d26e;
+    bottom: 0;
+    left: calc(50% - 50px);
+}
+
+.section-header p {
+    text-align: center;
+    padding-bottom: 30px;
+    color: #333;
+}
+/* fin nuestro trabajo  */
+
+/* Servicios */
+/* Services Section
+--------------------------------*/
+
+#services {
+    background: #fff;
+    background-size: cover;
+    padding: 60px 0 40px 0;
+}
+#services header h3{
+    color: #000 !important;
+}
+#services .box {
+    margin-bottom: 30px;
+}
+
+#services .icon {
+    float: left;
+}
+
+#services .icon i {
+    color: #18d26e;
+    font-size: 36px;
+    line-height: 1;
+    transition: 0.5s;
+}
+
+#services .title {
+    margin-left: 60px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+#services .title a {
+    color: #111;
+    text-decoration: none;
+}
+
+#services .box:hover .title a {
+    color: #18d26e;
+}
+
+#services .description {
+    color: #000;
+    font-size: 25px;
+    margin-left: 60px;
+    line-height: 24px;
+    margin-bottom: 0;
+}
+
+/* Fin servicios */
