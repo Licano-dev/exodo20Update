@@ -233,6 +233,11 @@ function initUI(){
 	}
 </style>
     <!-- Fin Teste de velocidad -->
+    <!-- Reloj -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+	<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./components/reloj/style-reloj.css">
+    <!-- fin Reloj -->
 </head>
 
 <body>
@@ -280,7 +285,7 @@ function initUI(){
                         <div class="bg-blue-transparent simple">
                             <p>
                                 "Velocidad y definición que no se detiene"
-                                <br><b>Test de Velocidad</b>
+                                <br><b><a href="#services" class="text-decoration-none color-green-text">Test de Velocidad</a></b>
                             </p>
                         </div>
                     </div>
@@ -353,7 +358,7 @@ function initUI(){
                                 </div>
                             </div>
                             <div id="ipArea">
-                                <span id="ip"></span>
+                                <span id="ip" style="font-size: 18px;"></span>
                             </div>
                         </div>
                     </div>
@@ -361,9 +366,22 @@ function initUI(){
                     <!-- test -->
                     
                 </div>
-
+                <!-- reloj -->
+                <div class="d-flex justify-content-center align-items-center p-2">
+                    <div class=" text-center">
+                        <div class="reloj">
+                            <p id="hora"></p>
+                            <span>:</span>
+                            <p id="min"></p>
+                        </div>
+                        <p id="fecha"></p>
+                        <h5 id="ubicacion"></h5>
+                    </div>
+                </div>
+                <!-- reloj -->
             </div>
         </section>
+
         <!-- #services -->
         
             <!--==========================
@@ -433,5 +451,11 @@ function initUI(){
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <!-- FIN ICONOS -->
+<!-- reloj -->
+<script  src="./components/reloj/script-reloj.js"></script>
+<!-- fin reloj -->
+<!-- lozalización -->
+<script src="./components/reloj/localizacion.js"></script>
+<!-- ====== -->
 </body>
 </html>
