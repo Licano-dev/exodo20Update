@@ -28,8 +28,8 @@ function I(i){return document.getElementById(i);}
 var s=new Speedtest(); //create speedtest object
 
 var meterBk=/Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent)?"#EAEAEA":"#80808040";
-var dlColor="#6060AA",
-	ulColor="#616161";
+var dlColor="#18d26e",
+	ulColor="#a1e6df";
 var progColor=meterBk;
 
 //CODE FOR GAUGES
@@ -126,12 +126,9 @@ function initUI(){
 }
 </script>
 <style type="text/css">
-	html,body{
-		border:none; padding:0; margin:0;
-		background:#FFFFFF;
-		color:#202020;
-	}
-	body{
+	
+	.test{
+        color:#202020;
 		text-align:center;
 		font-family:"Roboto",sans-serif;
 	}
@@ -161,7 +158,7 @@ function initUI(){
 		color:#FFFFFF;
 	}
 	#startStopBtn:before{
-		content:"Start";
+		content:"Iniciar";
 	}
 	#startStopBtn.running:before{
 		content:"Abort";
@@ -314,16 +311,14 @@ function initUI(){
                     </div>
                 </div>
             </section>
-            <!--==========================
-      Services Section
-    ============================-->
-        <section id="services">
+            <!--========Services Section===========-->
+        <section id="services" class="test">
             <div class="container">
 
                 <header class="section-header">
                     <h3>CONSULTAR VELOCIDAD</h3>
-                    <h4 class="text-center">Descubre la velocidad real de tu conexión a Internet y asegúrate de estar siempre un paso adelante en la era digital.</h4>
-                    <p>¡Realiza un test de velocidad ahora y potencia tu experiencia en línea!</p>
+                    <h4 class="text-center">¡Realiza un test de velocidad ahora y potencia tu experiencia en línea!</h4>
+                    <p>Descubre la velocidad real de tu conexión a Internet y asegúrate de estar siempre un paso adelante en la era digital.</p>
                 </header>
 
                 <div class="row justify-content-center">
@@ -345,13 +340,13 @@ function initUI(){
                             </div>
                             <div class="testGroup">
                                 <div class="testArea">
-                                    <div class="testName">Download</div>
+                                    <div class="testName">Descarga</div>
                                     <canvas id="dlMeter" class="meter"></canvas>
                                     <div id="dlText" class="meterText"></div>
                                     <div class="unit">Mbps</div>
                                 </div>
                                 <div class="testArea">
-                                    <div class="testName">Upload</div>
+                                    <div class="testName">Carga</div>
                                     <canvas id="ulMeter" class="meter"></canvas>
                                     <div id="ulText" class="meterText"></div>
                                     <div class="unit">Mbps</div>
@@ -414,15 +409,6 @@ function initUI(){
                         </div>
 
                     </div>
-
-                    <!-- <div class="col-lg-3 col-md-6 footer-newsletter">
-                        <h4>Suscribirse</h4>
-                        <p>Suscríbete para recibir noticias sobre promociones, ofertas y eventos.</p>
-                        <form action="contactar.php" method="post">
-                            <input type="email" name="emailSubs"><input type="submit" value="Suscribirse" name="Suscribe">
-                        </form>
-                    </div> -->
-
                 </div>
             </div>
         </div>
