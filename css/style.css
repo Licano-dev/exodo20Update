@@ -505,3 +505,24 @@
     background: #02ff78;
     border-bottom: 4px solid gray;
 }
+/* router */
+.img-carrusel{
+    object-fit: cover !important;
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+.descrip-router {
+    text-align: left;
+    padding-left: 25%;
+}
+
+article h5 {
+    font-weight: 800;
+    color: #18d36e;
+}
+article h3, article h5{
+    text-align: center;
+}
+/*fin router */
