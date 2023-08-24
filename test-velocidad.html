@@ -23,14 +23,13 @@
     <!-- Test de velocidad Complementos -->
     <script type="text/javascript" src="components/test-velocidad/speedtest.js"></script>
 <script type="text/javascript">
-function I(i){return document.getElementById(i);}
-//INITIALIZE SPEEDTEST
-var s=new Speedtest(); //create speedtest object
-
-var meterBk=/Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent)?"#EAEAEA":"#80808040";
-var dlColor="#18d26e",
-	ulColor="#a1e6df";
-var progColor=meterBk;
+    function I(id){return document.getElementById(id);}
+var meterBk="#E0E0E0";
+var dlColor="#6060AA",
+	ulColor="#309030",
+	pingColor="#AA6060",
+	jitColor="#AA6060";
+var progColor="#EEEEEE";
 
 //CODE FOR GAUGES
 function drawMeter(c,amount,bk,fg,progress,prog){
@@ -46,12 +45,12 @@ function drawMeter(c,amount,bk,fg,progress,prog){
 	}
 	ctx.beginPath();
 	ctx.strokeStyle=bk;
-	ctx.lineWidth=12*sizScale;
+	ctx.lineWidth=16*sizScale;
 	ctx.arc(c.width/2,c.height-58*sizScale,c.height/1.8-ctx.lineWidth,-Math.PI*1.1,Math.PI*0.1);
 	ctx.stroke();
 	ctx.beginPath();
 	ctx.strokeStyle=fg;
-	ctx.lineWidth=12*sizScale;
+	ctx.lineWidth=16*sizScale;
 	ctx.arc(c.width/2,c.height-58*sizScale,c.height/1.8-ctx.lineWidth,-Math.PI*1.1,amount*Math.PI*1.2-Math.PI*1.1);
 	ctx.stroke();
 	if(typeof progress !== "undefined"){
@@ -62,51 +61,59 @@ function drawMeter(c,amount,bk,fg,progress,prog){
 function mbpsToAmount(s){
 	return 1-(1/(Math.pow(1.3,Math.sqrt(s))));
 }
-function format(d){
-    d=Number(d);
-    if(d<10) return d.toFixed(2);
-    if(d<100) return d.toFixed(1);
-    return d.toFixed(0);
+function msToAmount(s){
+	return 1-(1/(Math.pow(1.08,Math.sqrt(s))));
 }
 
-//UI CODE
-var uiData=null;
+//SPEEDTEST AND UI CODE
+var w=null; //speedtest worker
+var data=null; //data from worker
 function startStop(){
-    if(s.getState()==3){
+	if(w!=null){
 		//speedtest is running, abort
-		s.abort();
+		w.postMessage('abort');
+		w=null;
 		data=null;
 		I("startStopBtn").className="";
 		initUI();
 	}else{
 		//test is not running, begin
+		w=new Worker('./components/test-velocidad/speedtest_worker.min.js');
+		w.postMessage('start'); //Add optional parameters as a JSON object to this command
 		I("startStopBtn").className="running";
-		s.onupdate=function(data){
-            uiData=data;
+		w.onmessage=function(e){
+			data=JSON.parse(e.data);
+			var status=data.testState;
+			if(status>=4){
+				//test completed
+				I("startStopBtn").className="";
+				w=null;
+				updateUI(true);
+			}
 		};
-		s.onend=function(aborted){
-            I("startStopBtn").className="";
-            updateUI(true);
-		};
-		s.start();
 	}
 }
-//this function reads the data sent back by the test and updates the UI
+//this function reads the data sent back by the worker and updates the UI
 function updateUI(forced){
-	if(!forced&&s.getState()!=3) return;
-	if(uiData==null) return;
-	var status=uiData.testState;
-	I("ip").textContent=uiData.clientIp;
-	I("dlText").textContent=(status==1&&uiData.dlStatus==0)?"...":format(uiData.dlStatus);
-	drawMeter(I("dlMeter"),mbpsToAmount(Number(uiData.dlStatus*(status==1?oscillate():1))),meterBk,dlColor,Number(uiData.dlProgress),progColor);
-	I("ulText").textContent=(status==3&&uiData.ulStatus==0)?"...":format(uiData.ulStatus);
-	drawMeter(I("ulMeter"),mbpsToAmount(Number(uiData.ulStatus*(status==3?oscillate():1))),meterBk,ulColor,Number(uiData.ulProgress),progColor);
-	I("pingText").textContent=format(uiData.pingStatus);
-	I("jitText").textContent=format(uiData.jitterStatus);
+	if(!forced&&(!data||!w)) return;
+	var status=data.testState;
+	I("ip").textContent=data.clientIp;
+	I("dlText").textContent=(status==1&&data.dlStatus==0)?"...":data.dlStatus;
+	drawMeter(I("dlMeter"),mbpsToAmount(Number(data.dlStatus*(status==1?oscillate():1))),meterBk,dlColor,Number(data.dlProgress),progColor);
+	I("ulText").textContent=(status==3&&data.ulStatus==0)?"...":data.ulStatus;
+	drawMeter(I("ulMeter"),mbpsToAmount(Number(data.ulStatus*(status==3?oscillate():1))),meterBk,ulColor,Number(data.ulProgress),progColor);
+	I("pingText").textContent=data.pingStatus;
+	drawMeter(I("pingMeter"),msToAmount(Number(data.pingStatus*(status==2?oscillate():1))),meterBk,pingColor,Number(data.pingProgress),progColor);
+	I("jitText").textContent=data.jitterStatus;
+	drawMeter(I("jitMeter"),msToAmount(Number(data.jitterStatus*(status==2?oscillate():1))),meterBk,jitColor,Number(data.pingProgress),progColor);
 }
 function oscillate(){
 	return 1+0.02*Math.sin(Date.now()/100);
 }
+//poll the status from the worker (this will call updateUI)
+setInterval(function(){
+	if(w) w.postMessage('status');
+},200);
 //update the UI every frame
 window.requestAnimationFrame=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.msRequestAnimationFrame||(function(callback,element){setTimeout(callback,1000/60);});
 function frame(){
@@ -118,17 +125,19 @@ frame(); //start frame loop
 function initUI(){
 	drawMeter(I("dlMeter"),0,meterBk,dlColor,0);
 	drawMeter(I("ulMeter"),0,meterBk,ulColor,0);
+	drawMeter(I("pingMeter"),0,meterBk,pingColor,0);
+	drawMeter(I("jitMeter"),0,meterBk,jitColor,0);
 	I("dlText").textContent="";
 	I("ulText").textContent="";
 	I("pingText").textContent="";
 	I("jitText").textContent="";
 	I("ip").textContent="";
 }
+
 </script>
 <style type="text/css">
-	
 	.test{
-        color:#202020;
+		color:#202020;
 		text-align:center;
 		font-family:"Roboto",sans-serif;
 	}
@@ -158,14 +167,14 @@ function initUI(){
 		color:#FFFFFF;
 	}
 	#startStopBtn:before{
-		content:"Iniciar";
+		content:"Start";
 	}
 	#startStopBtn.running:before{
 		content:"Abort";
 	}
 	#test{
 		margin-top:2em;
-		margin-bottom:2em;
+		margin-bottom:1em;
 	}
 	div.testArea{
 		display:inline-block;
@@ -174,48 +183,28 @@ function initUI(){
 		position:relative;
 		box-sizing:border-box;
 	}
-	div.testArea2{
-		display:inline-block;
-		width:14em;
-		height:7em;
-		position:relative;
-		box-sizing:border-box;
-		text-align:center;
-	}
-	div.testArea div.testName{
+	div.testName{
 		position:absolute;
 		top:0.1em; left:0;
 		width:100%;
 		font-size:1.4em;
 		z-index:9;
 	}
-	div.testArea2 div.testName{
-        display:block;
-        text-align:center;
-        font-size:1.4em;
-	}
-	div.testArea div.meterText{
+	div.meterText{
 		position:absolute;
 		bottom:1.55em; left:0;
 		width:100%;
 		font-size:2.5em;
 		z-index:9;
 	}
-	div.testArea2 div.meterText{
-        display:inline-block;
-        font-size:2.5em;
-	}
 	div.meterText:empty:before{
 		content:"0.00";
 	}
-	div.testArea div.unit{
+	div.unit{
 		position:absolute;
 		bottom:2em; left:0;
 		width:100%;
 		z-index:9;
-	}
-	div.testArea2 div.unit{
-		display:inline-block;
 	}
 	div.testArea canvas{
 		position:absolute;
@@ -223,14 +212,23 @@ function initUI(){
 		z-index:1;
 	}
 	div.testGroup{
-		display:block;
-        margin: 0 auto;
+		display:inline-block;
+	}
+	@media all and (max-width:65em){
+		body{
+			font-size:1.5vw;
+		}
 	}
 	@media all and (max-width:40em){
 		body{
 			font-size:0.8em;
 		}
+		div.testGroup{
+			display:block;
+			margin: 0 auto;
+		}
 	}
+
 </style>
     <!-- Fin Teste de velocidad -->
     <!-- Reloj -->
@@ -328,41 +326,41 @@ function initUI(){
 
                 <div class="row justify-content-center">
                     <!-- test -->
-                    <div id="testWrapper">
-                        <div id="startStopBtn" onclick="startStop()"></div>
-                        <div id="test">
-                            <div class="testGroup">
-                                <div class="testArea2">
-                                    <div class="testName">Ping</div>
-                                    <div id="pingText" class="meterText" style="color:#AA6060"></div>
-                                    <div class="unit">ms</div>
-                                </div>
-                                <div class="testArea2">
-                                    <div class="testName">Jitter</div>
-                                    <div id="jitText" class="meterText" style="color:#AA6060"></div>
-                                    <div class="unit">ms</div>
-                                </div>
+                    <div id="startStopBtn" onclick="startStop()"></div>
+                    <div id="test">
+                        <div class="testGroup">
+                            <div class="testArea">
+                                <div class="testName">Download</div>
+                                <canvas id="dlMeter" class="meter"></canvas>
+                                <div id="dlText" class="meterText"></div>
+                                <div class="unit">Mbps</div>
                             </div>
-                            <div class="testGroup">
-                                <div class="testArea">
-                                    <div class="testName">Descarga</div>
-                                    <canvas id="dlMeter" class="meter"></canvas>
-                                    <div id="dlText" class="meterText"></div>
-                                    <div class="unit">Mbps</div>
-                                </div>
-                                <div class="testArea">
-                                    <div class="testName">Carga</div>
-                                    <canvas id="ulMeter" class="meter"></canvas>
-                                    <div id="ulText" class="meterText"></div>
-                                    <div class="unit">Mbps</div>
-                                </div>
-                            </div>
-                            <div id="ipArea">
-                                <span id="ip" style="font-size: 18px;"></span>
+                            <div class="testArea">
+                                <div class="testName">Upload</div>
+                                <canvas id="ulMeter" class="meter"></canvas>
+                                <div id="ulText" class="meterText"></div>
+                                <div class="unit">Mbps</div>
                             </div>
                         </div>
+                        <div class="testGroup">
+                            <div class="testArea">
+                                <div class="testName">Ping</div>
+                                <canvas id="pingMeter" class="meter"></canvas>
+                                <div id="pingText" class="meterText"></div>
+                                <div class="unit">ms</div>
+                            </div>
+                            <div class="testArea">
+                                <div class="testName">Jitter</div>
+                                <canvas id="jitMeter" class="meter"></canvas>
+                                <div id="jitText" class="meterText"></div>
+                                <div class="unit">ms</div>
+                            </div>
+                        </div>
+                        <div id="ipArea">
+                            IP Address: <span id="ip"></span>
+                        </div>
                     </div>
-                    <script type="text/javascript">setTimeout(function(){initUI()},100);</script>
+                    <script type="text/javascript">setTimeout(initUI,100);</script>
                     <!-- test -->
                     
                 </div>
