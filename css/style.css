@@ -430,7 +430,7 @@
     margin-bottom: 20px;
 }
 
-#contact .form #sendmessage {
+/* #contact .form #sendmessage {
     color: #18d26e;
     border: 1px solid #18d26e;
     display: none;
@@ -470,19 +470,22 @@
     border-radius: 0;
     box-shadow: none;
     font-size: 15px;
-}
+} */
 
-#contact .form button[type="submit"] {
+#btn-enviar {
     background: #18d26e;
-    border: 0;
+    border: 5px solid #18d26e;
+    border-radius: 10px;
     padding: 10px 30px;
     color: #fff;
     transition: 0.4s;
     cursor: pointer;
+    box-sizing: border-box
 }
 
-#contact .form button[type="submit"]:hover {
+#btn-enviar:hover {
     background: #13a456;
+    border: 5px solid white;
 }
 /* fin contacto */
 .masInfo {

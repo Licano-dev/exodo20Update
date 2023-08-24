@@ -98,7 +98,7 @@ a:focus {
   box-shadow: none;
 }
 
-.form-control {
+/* .form-control {
   width: 100%;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -133,7 +133,7 @@ a:focus {
 textarea.form-control {
   min-height: 150px;
   padding: 10px 10px 10px 10px;
-}
+} */
 
 /* <<< Global >>> */
 .container { max-width: 1150px; }
