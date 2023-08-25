@@ -25,10 +25,10 @@
 <script type="text/javascript">
     function I(id){return document.getElementById(id);}
 var meterBk="#E0E0E0";
-var dlColor="#6060AA",
-	ulColor="#309030",
-	pingColor="#AA6060",
-	jitColor="#AA6060";
+var dlColor="#18d26e",
+	ulColor="#304890",
+	pingColor="#010231e8",
+	jitColor="#010231e8";
 var progColor="#EEEEEE";
 
 //CODE FOR GAUGES
@@ -174,7 +174,7 @@ function initUI(){
 	}
 	#test{
 		margin-top:2em;
-		margin-bottom:1em;
+		/* margin-bottom:1em; */
 	}
 	div.testArea{
 		display:inline-block;
@@ -356,8 +356,8 @@ function initUI(){
                                 <div class="unit">ms</div>
                             </div>
                         </div>
-                        <div id="ipArea">
-                            IP Address: <span id="ip"></span>
+                        <div id="ipArea" style="font-weight: bold; font-size: 21px;">
+                            <span id="ip"></span>
                         </div>
                     </div>
                     <script type="text/javascript">setTimeout(initUI,100);</script>

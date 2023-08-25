@@ -45,7 +45,7 @@ if (strpos($ip, '192.168.') === 0) { // 192.168/16 private IPv4
     die();
 }
 if (strpos($ip, '169.254.') === 0) { // IPv4 link-local
-    echo json_encode(['processedString' => $ip . " - link-local IPv4 access", 'rawIspInfo' => ""]);
+    echo json_encode(['processedString' => $ip . "  link-local IPv4 access", 'rawIspInfo' => ""]);
     die();
 }
 
@@ -140,7 +140,7 @@ if (isset($_GET["isp"])) {
     } catch (Exception $ex) {
         $isp = "Unknown ISP";
     }
-    echo json_encode(['processedString' => $ip . " - " . $isp, 'rawIspInfo' => $rawIspInfo]);
+    echo json_encode(['processedString' => "Dirrección Ip: " . $ip . " - " . $isp, 'rawIspInfo' => $rawIspInfo]);
 } else {
     echo json_encode(['processedString' => $ip, 'rawIspInfo' => ""]);
 }
