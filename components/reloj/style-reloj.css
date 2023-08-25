@@ -27,11 +27,11 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 )
 }
 .reloj {
-	font-size: 65px;
+	font-size: 4.0625em;
   font-family: 'Orbitron', sans-serif;;
 	height: 70px;
   width: 400px;
-  margin: 8px auto 5px;
+  margin: 8px auto 10px;
 } 
 
 #hora, #min {
@@ -40,6 +40,7 @@
 
 #fecha {
   font-size: 18px;
+  margin-top: 19px;
 }
 
 /*Boton*/
