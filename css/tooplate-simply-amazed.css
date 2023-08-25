@@ -430,6 +430,7 @@ textarea.form-control {
   .navbar .navbar-nav > .nav-item > a.nav-link {
     padding: 10px;
     color: #fff;
+    font-size: 1.375em;/*22px 1999*/
   }
 }
 
@@ -589,7 +590,8 @@ textarea.form-control {
   .navbar .navbar-collapse::before { height: 0; }
 
   .navbar .navbar-nav > .nav-item {
-    min-height: 45px;
+    /* min-height: 45px; *//*1999*/
+    min-height: 4.3125em;/*69px implemetación unidad em para iconos menu bar movil*/
     margin-bottom: 10px;
     background-size: contain;
   }
